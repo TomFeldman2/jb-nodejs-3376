@@ -38,4 +38,15 @@ function countDaysPromise() {
 }
 
 
-countDaysPromise()
+async function countDaysAsync() {
+    days = Array.from({length: 8}, (_, i) => i + 1);
+    let cnt = 0;
+    for await (const i of days.map(day => howManyCandlesPromise(day))) {
+        cnt += i;
+    }
+
+    console.log(cnt);
+}
+
+
+countDaysAsync()
