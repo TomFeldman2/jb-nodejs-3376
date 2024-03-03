@@ -9,3 +9,14 @@ const howManyCandlesCallback = (dayNumber, callback) => {
 
     return callback ( null, dayNumber + 1 );
 }
+
+function countDays(i, total) {
+    if (i == 0) {
+        return console.log(total);
+    }
+
+    howManyCandlesCallback(i, (err, cnt) => countDays(i - 1, total + cnt));
+}
+
+
+console.log(countDays(8, 0));
