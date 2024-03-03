@@ -10,13 +10,32 @@ const howManyCandlesCallback = (dayNumber, callback) => {
     return callback ( null, dayNumber + 1 );
 }
 
-function countDays(i, total) {
-    if (i == 0) {
+const howManyCandlesPromise = (dayNumber) => {
+    return new Promise((resolve, reject) => {
+        howManyCandlesCallback(dayNumber, (err, value) => {
+            if (err) {
+                return reject(err);
+            }
+
+            return resolve(value)
+        })
+    })
+}
+
+function countDaysCallback(i, total) {
+    if (i === 0) {
         return console.log(total);
     }
 
-    howManyCandlesCallback(i, (err, cnt) => countDays(i - 1, total + cnt));
+    howManyCandlesCallback(i, (err, cnt) => countDaysCallback(i - 1, total + cnt));
+}
+
+function countDaysPromise() {
+    days = Array.from({length: 8}, (_, i) => i + 1);
+    return Promise.all(days.map(day => howManyCandlesPromise(day)))
+        .then(counts => counts.reduce((partialSum, c) => partialSum + c))
+        .then(sum => console.log(sum))
 }
 
 
-console.log(countDays(8, 0));
+countDaysPromise()
